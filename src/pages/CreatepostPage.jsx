@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 function CreatepostPage() {
 	const navigate = useNavigate()
   const [selectedImage, setSelectedImage] = useState(null);
+  const [loading, setLoading] = useState(false)
   const API_URL =import.meta.env.VITE_API_URL;
   const fileChangeHandler = (e) => {
     const file = e.target.files[0];
@@ -13,9 +14,9 @@ function CreatepostPage() {
   };
   const submitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true)
     const formData = new FormData(e.target);
-    console.log(formData.entries.value);
-	axios.post(`${API_URL}/create-post`, formData)
+	  axios.post(`${API_URL}/create-post`, formData)
 	.then((res)=>{
 		alert("Post created successfully")
 		e.target.reset()
@@ -25,8 +26,18 @@ function CreatepostPage() {
 		console.log(err);
 		
 	})
+  .finally(()=>{
+    setLoading(false);
+  })
   };
-
+if (loading) {
+    return (
+      <div className="loader-container w-full flex-col h-screen flex justify-center items-center">
+        <div className="spinner animate-spin text-4xl w-8 h-8 border-2 border-dotted rounded-full"></div>
+        <p>Loading posts...</p>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col justify-center items-center h-screen p-5 w-full">
       <div className="flex flex-col justify-center items-center h-screen w-full">

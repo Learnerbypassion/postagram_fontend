@@ -2,12 +2,15 @@ import React ,{useState, useEffect} from 'react'
 import axios from 'axios'
 function ShowPost() {
     const [posts, setPosts] = useState([]);
+    const [loader, setLoader] = useState(true)
     const API_URL =import.meta.env.VITE_API_URL;
     useEffect(() => {
         axios.get(`${API_URL}/posts`)
         .then((res)=>{
-            // console.log(res.data);
             setPosts(res.data.posts)
+        })
+        .finally(()=>{
+            setLoader(false)
         })
     }, [])
     const removePost = (elem)=>{
@@ -15,13 +18,23 @@ function ShowPost() {
         axios.delete(`${API_URL}/posts/${elem._id}`)
         .then(() => {
             alert("Post deleted successfully");
-      setPosts(prevPosts =>
-        prevPosts.filter(post => post._id !== elem._id)
+            setPosts(prevPosts =>
+            prevPosts.filter(post => post._id !== elem._id)
+        .finally(()=>{
+            setLoader(false);
+        })
       );
     })
     .catch(err => console.error(err));
     }
-    
+     if (loader) {
+    return (
+      <div className="loader-container w-full flex-col h-screen flex justify-center items-center">
+        <div className="spinner animate-spin text-4xl w-8 h-8 border-2 border-dotted rounded-full"></div>
+        <p>Loading posts...</p>
+      </div>
+    );
+  }
   return (
     <div>
         <header className='bg-neutral-800 text-amber-50 px-3 py-1'>
