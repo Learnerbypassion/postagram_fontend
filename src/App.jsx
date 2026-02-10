@@ -2,7 +2,7 @@ import React from 'react'
 import {BrowserRouter as Router , Routes, Route} from 'react-router-dom'
 import Landingpage from './pages/LandingPage.jsx';
 import CreatepostPage from './pages/CreatepostPage.jsx';
-import ShowPost from './pages/showPost.jsx';
+import ShowPost from './pages/ShowPost.jsx';
 const App = () => {
   return (
    <Router>
